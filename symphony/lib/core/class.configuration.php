@@ -167,7 +167,7 @@ class Configuration
      * This magic `__toString` function converts the internal `$this->_properties`
      * array into a string representation. Symphony generates the `MANIFEST/config.php`
      * file in this manner.
-     * @see serializeArray()
+     *
      * @return string
      *  A string that contains a array representation of `$this->_properties`.
      *  This is used by Symphony to write the `config.php` file.
@@ -175,62 +175,16 @@ class Configuration
     public function __toString()
     {
         $string = 'array(';
-
         foreach ($this->_properties as $group => $data) {
             $string .= str_repeat(PHP_EOL, 3) . "\t\t###### ".strtoupper($group)." ######";
-            $string .= PHP_EOL . "\t\t'$group' => ";
-
-            $string .= $this->serializeArray($data, 3);
-
-            $string .= ",";
+            $string .= PHP_EOL . "\t\t'$group' => array(";
+            foreach ($data as $key => $value) {
+                $string .= PHP_EOL . "\t\t\t'$key' => ".(strlen($value) > 0 ? var_export($value, true) : 'null').",";
+            }
+            $string .= PHP_EOL . "\t\t),";
             $string .= PHP_EOL . "\t\t########";
         }
         $string .= PHP_EOL . "\t)";
-
-        return $string;
-    }
-
-    /**
-     * The `serializeArray` function properly format and indent multidimensional
-     * arrays using recursivity.
-     * 
-     * `__toString()` call `serializeArray` to use the recursive condition.
-     * The keys (int) in array won't have apostrophe.
-     * Array without multidimensional array will be output with normal indentation.
-     * 
-     * @return string
-     *  A string that contains a array representation of the $data parameter.
-     * @param array $arr
-     *  An array that contains `$this->_properties`
-     * @param integer $indentation
-     *  A Integer used to indent multidimensional array using recursivity.
-     */
-
-    protected function serializeArray(array $arr, $indentation = 0)
-    {
-        $tabs = '';
-        $closeTabs = '';
-        for ($i = 0; $i < $indentation; $i++) {
-            $tabs .= "\t";
-            if ($i < $indentation - 1) {
-                $closeTabs .= "\t";
-            }
-        }
-        $string = 'array(';
-        foreach ($arr as $key => $value) {
-            $string .= (is_numeric($key) ? PHP_EOL . "$tabs $key => " : PHP_EOL . "$tabs'$key' => ");
-            if (is_array($value)) {
-                if (empty($value)) {
-                    $string .= 'array()';
-                } else {
-                    $string .= $this->serializeArray($value, $indentation + 1);
-                }
-            } else {
-                $string .= (General::strlen($value) > 0 ? var_export($value, true) : 'null');
-            }
-            $string .= ",";
-        }
-        $string .=  PHP_EOL . "$closeTabs)";
         return $string;
     }
 
