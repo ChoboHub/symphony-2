@@ -298,6 +298,7 @@ class SectionDatasource extends Datasource
         // Support the legacy parameter `ds-datasource-handle`
         $key = 'ds-' . $this->dsParamROOTELEMENT;
         $singleParam = count($this->dsParamPARAMOUTPUT) == 1;
+
         if ($singleParam && (!isset($this->_param_pool[$key]) || !is_array($this->_param_pool[$key]))) {
             $this->_param_pool[$key] = array();
         }
@@ -324,7 +325,7 @@ class SectionDatasource extends Datasource
                 }
             } elseif (!is_null($param_pool_values)) {
                 $this->_param_pool[$param_key][] = $param_pool_values;
-                
+
                 if ($singleParam) {
                     $this->_param_pool[$key][] = $param_pool_values;
                 }
