@@ -179,8 +179,8 @@ class Configuration
         foreach ($this->_properties as $group => $data) {
             $string .= str_repeat(PHP_EOL, 3) . "\t\t###### ".strtoupper($group)." ######";
             $string .= PHP_EOL . "\t\t'$group' => array(";
-            foreach ($data as $key => $value) {
 
+            foreach ($data as $key => $value) {
                 $string .= PHP_EOL . "\t\t\t'$key' => ".(strlen($value) > 0 ? var_export($value, true) : 'null').",";
             }
 
@@ -189,7 +189,7 @@ class Configuration
         }
 
         $string .= PHP_EOL . "\t)";
-        
+
         return $string;
     }
 
