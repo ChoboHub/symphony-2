@@ -76,11 +76,11 @@
 
 		/**
 		 * Handle mouse interactions on the suggestion list.
-	     * In order to make this work with the keyboard as well, set the class
-	     * `.active` to the current target.
-	     *
-	     * @param Event event
-	     *  The mouseover event
+		 * In order to make this work with the keyboard as well, set the class
+		 * `.active` to the current target.
+		 *
+		 * @param Event event
+		 *  The mouseover event
 		 */
 		var handleOver = function(event) {
 			var suggestion = $(event.target);
@@ -91,10 +91,10 @@
 
 		/**
 		 * Handle finished mouse interactions on the suggestion list and
-	     * remove `.active` class set by `handleOver`.
-	     *
-	     * @param Event event
-	     *  The mouseout event
+		 * remove `.active` class set by `handleOver`.
+		 *
+		 * @param Event event
+		 *  The mouseout event
 		 */
 		var handleOut = function(event) {
 			var suggestion = $(event.target);
@@ -104,9 +104,9 @@
 
 		/**
 		 * Handle keyboard navigation in the suggestion list.
-	     *
-	     * @param Event event
-	     *  The keydown event
+		 *
+		 * @param Event event
+		 *  The keydown event
 		 */
 		var handleNavigation = function(event) {
 			var input = $(this),
@@ -133,6 +133,7 @@
 			// Enter
 			else if(event.which == 13) {
 				event.preventDefault();
+				//***
 				active = input.next('.suggestions').find('li:not(.help).active').text();
 
 				if(active) {
@@ -143,16 +144,16 @@
 
 		/**
 		 * Handle suggestion selection by click.
-	     *
-	     * @param Event event
-	     *  The mousedown event
+		 *
+		 * @param Event event
+		 *  The mousedown event
 		 */
 		var handleSelect = function(event) {
-			var input = $(event.target).parent('.suggestions').prev('input');
-
-			select(event.target.textContent, input);
+			var target = $(event.target);
+			var input = target.parent('.suggestions').prev('input');
+			var value = findValueFromElement(target);
+			select(value, input);
 		};
-
 	/*-------------------------------------------------------------------------
 		Suggestions
 	-------------------------------------------------------------------------*/
@@ -274,7 +275,7 @@
 			suggestions.replaceWith(clone);
 		};
 
-		var list = function(suggestions, result) {
+	var list = function(suggestions, result) {
 			var clone = suggestions.clone(),
 				help = clone.find('.help:first'),
 				values = [];
@@ -284,17 +285,15 @@
 
 			// Add suggestions
 			if(result.entries) {
-				$.each(result.entries, function(index, data) {
-					values.push(data.value);
-				});
 
-				values = values.filter(function(item, index, array) {
+				values = result.entries.filter(function(item, index, array) {
 					return array.indexOf(item) === index;
 				});
 
-				$.each(values, function(index, value) {
+				$.each(values, function(index, data) {
 					var suggestion = $('<li />', {
-						text: value
+						text: data.value,
+						'data-value': data.key
 					});
 
 					if(help) {
@@ -403,6 +402,11 @@
 			}
 			
 			stayInFocus(suggestions);
+		};
+
+		var findValueFromElement = function(input){
+			var valueFromElement = input.next('.suggestions');
+
 		};
 
 	/*-------------------------------------------------------------------------

@@ -88,7 +88,10 @@ class contentAjaxQuery extends JSONPage
 
         foreach ($options as $value => $data) {
             if (!$search || strripos($data, $search) !== false || strripos($value, $search) !== false) {
-                $this->_Result['entries'][]['value'] = ($data ? $data : $value);
+                $this->_Result['entries'][] = array(
+                    'value' => ($data ? $data : $value),
+                    'key' => $value,
+                );
             }
         }
     }

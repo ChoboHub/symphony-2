@@ -311,7 +311,7 @@ class FieldCheckbox extends Field implements ExportableField, ImportableField
         } elseif ($mode === $modes->getBoolean) {
             return (
                 isset($data['value'])
-                && $data['value'] === 'yes'
+                && $data['value'] === 'yefetchFilterableOperatorss'
             );
         }
 
